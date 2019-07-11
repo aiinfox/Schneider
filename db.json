@@ -1,0 +1,74 @@
+{
+  "availableOptions": [
+    {
+      "id": "1",
+      "name": "LAN"
+    },
+    {
+      "id": "2",
+      "name": "WiFi"
+    },
+    {
+      "id": "3",
+      "name": "Auto"
+    }
+  ],
+  "availableConnections": [
+    {
+      "item": "Connection 1"
+    },
+    {
+      "item": "Connection 2"
+    },
+    {
+      "item": "Connection 3"
+    },
+    {
+      "item": "Connection 4"
+    },
+    {
+      "item": "Connection 5"
+    },
+    {
+      "item": "Connection 6"
+    }
+  ],
+  "availableNetworks": [
+    {
+      "item": "Network 1"
+    },
+    {
+      "item": "Network 2"
+    },
+    {
+      "item": "Network 3"
+    },
+    {
+      "item": "Network 4"
+    },
+    {
+      "item": "Network 5"
+    },
+    {
+      "item": "Network 6"
+    }
+  ],
+  "checkNetworks": [
+    {
+      "id": 1,
+      "networkname": "networkname",
+      "password": "password"
+    }
+  ],
+  "checkManualNetworks": [
+    {
+      "id": 1,
+      "ipaddress": "ipaddress",
+      "DHCP": "DHCP",
+      "subnetmask": "subnetmask",
+      "gateway": "gateway",
+      "dnserver": "dnserver",
+      "hostname": "hostname"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+// Network CSS
+.available-networks{
+  position: relative;
+}
+.paneltitle{
+  background: #ededed; padding: 10px; font-size: 16px
+}
+.connectioncontainer{
+  max-height: 200px;
+  overflow: auto;
+}
+.listconnection{
+  padding: 15px;
+  border-bottom: 1px solid #ededed; position: relative;
+}
+.listconnection:hover, .listconnection.active{
+  background: #ddd;
+}
+.disconnectcon{
+  top: 45%;
+  position: absolute;
+  right: 10px;
+}
+.disconnectcon a{
+  background: #188CD3;padding: 10px 30px; display: inline-block; color: #fff; border-radius: 3px; margin: 10px
+}
+.selectnetwork button[disabled] { opacity: .6; }
+.selectnetwork a{ font-size: 12px; margin: 15px; }
+.selectnetwork{
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 4px;
+  margin: 10px;
+  margin-top: 50px;
+  position: relative;
+}
+.panel-body h3 { font-size: 17px; font-weight: bold; color: #555; padding: 15px; padding-top: 0 }
+.nav, .pagination, .carousel, .panel-title a, a { cursor: pointer; }
+.ng-animate.item:not(.left):not(.right) {
+  -webkit-transition: 0s ease-in-out left;
+  transition: 0s ease-in-out left
+}
+.form-group { width: 100%; }
+.no-padd { padding: 0 }
+md-card md-card-content.no-padd .md-headline { padding: 15px; display: block; }
+md-card md-card-content.no-padd .alert { margin-top: 10px; }
+.curpointer { cursor: pointer; }
+.curpointer form { cursor: default; }
+md-input-container .md-errors-spacer:empty { display: none; }
+.block { display: block; }
+.listconnection>a.head { display: block; min-height: 20px; }
+.listconnection>a.head:hover { text-decoration: none; }
+
+/* Temp */
+.connectioncontainer { max-height: 505px; }
+.locksignal { vertical-align: top; margin: -2px 7px 0 0; color: #333; }
+.connected { color: #111; margin-top: -1px; right: 20px; position: absolute; }
+.closeConnection { position: absolute; right: -8px; top:-8px; }
+.loader { position: absolute; background: rgba(0, 0, 0, .1); left: 0; top: 0; width: 100%; height: 100%; text-align: center; }
+.loader md-progress-circular { position: absolute; left: 50%; top: 50%; margin-left: -25px; margin-top: -25px; }
+.loader md-progress-circular path { stroke: rgb(255, 255, 255) }
+md-select { width: 100%; }
+.lanconn { vertical-align: top; margin: -4px 5px 0 -1px;}
+
+
+.mdi {
+    font-weight: normal;
+    font-style: normal;
+    font-size: 26px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+md-input-container:not(.md-input-has-value) input:not(:focus) { color: rgba(0,0,0,0.87) !important; }

@@ -1,0 +1,215 @@
+<div style="padding: 25px 0;" uib-accordion class="container">
+    <uib-accordion-group class="panel-default" heading="Network settings" csb-permissions is-open="true">
+        <!-- todo: learn what these are -->
+        <div class="install-package" filters="queueLimit">
+
+            <div layout="row">
+
+                <div flex="60">
+
+                    <div ng-if="netwrkData.showDisconnectErr" class="alert alert-danger" role="alert">Connect Lost</div>
+
+                    <md-card class="wifiSetting">
+                        <md-card-content class="no-padd">
+
+                            <!-- Available networks -->
+                            <div class="available-networks">
+
+                                <div class="connectioncontainer">
+                                    <div class="listconnection" ng-class="{ 'active': active == $index}" ng-repeat="model in netwrkData.availableConnections track by $index">
+                                        <a class="head" ng-click="onConnect($index)">
+                                            <span class="mdi mdi-wifi locksignal" ng-class="{ 'mdi-wifi-strength-1': model.signal === 1, 'mdi-wifi-strength-2': model.signal === 2, 'mdi-wifi-strength-4': model.signal === 3}"></span>
+                                            {{model.ssid}}
+                                            <span ng-if="netwrkData.netConnected && netwrkData.connectedIndex === $index">
+                                                <span class="mdi mdi-check connected"></span>
+                                            </span>
+                                        </a>
+
+                                        <!-- Network Connect -->
+                                        <md-card layout="column" class="selectnetwork md-list-item-text" ng-if="toggleNetworkScreen[$index]">
+
+                                            <a ng-click="onClose($index)" class="closeConnection"><i class="material-icons">close</i></a>
+
+                                            <md-card-content class="no-padd">
+                                                <div ng-if="netwrkData.netConnected && netwrkData.connectedIndex === $index"
+                                                    class="alert alert-success" role="alert">Connected!</div>
+                                                <!-- Loader -->
+                                                <div class="loader" ng-if="netwrkData.beingEval[$index]">
+                                                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                                                </div>
+
+
+                                                <form name="forms.selectNetwrkForm[$index]" ng-submit="submitSelectNetwrk($index)"
+                                                    novalidate autocomplete="off">
+
+                                                    <div layout="row" ng-if="toggleNetworkScreen[$index]">
+                                                        <md-input-container flex>
+                                                            <label>SSID</label>
+                                                            <input autocomplete="off" name="ssid" ng-model="netwrkData.selectNetwrkForm.ssid"
+                                                                type="text" placeholder="Enter SSID" required
+                                                                ng-required="toggleNetworkScreen[$index]" ng-disabled="netwrkData.readOnlyMode[$index]">
+                                                        </md-input-container>
+                                                    </div>
+
+                                                    <div layout="row" ng-if="!netwrkData.readOnlyMode[$index]">
+                                                        <md-input-container flex>
+                                                            <label>Password</label>
+                                                            <input autocomplete="new-password" name="networkpassword"
+                                                                ng-model="netwrkData.selectNetwrkForm.networkpassword"
+                                                                type="password" placeholder="Enter password" required
+                                                                minlength="4">
+                                                        </md-input-container>
+                                                    </div>
+
+                                                    <div layout="row" layout-align="end">
+                                                        <md-button type="submit" class="md-raised md-primary"
+                                                            ng-disabled="forms.selectNetwrkForm[$index].$invalid" ng-if="!netwrkData.readOnlyMode[$index]">Connect</md-button>
+                                                        <md-button ng-click="onReconnect($index)" class="md-raised md-primary"
+                                                            ng-if="netwrkData.readOnlyMode[$index]">Disconnect</md-button>
+                                                    </div>
+
+                                                </form>
+
+                                            </md-card-content>
+
+                                        </md-card>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ./Available networks -->
+                        </md-card-content>
+                    </md-card>
+
+                    <a ng-click="addManully(currentlyOpened, 'anchorCard')"> Add Network manually</a>
+
+                    <!-- Manual Connect -->
+                    <md-card id="anchorCard" layout="column" class="selectnetwork md-list-item-text" ng-if="toggleManualScreen">
+
+                        <md-card-content class="no-padd">
+                            <div ng-if="netwrkData.showSSIDErr" class="alert alert-danger" role="alert">
+                                Incorrect SSID or Password (Example Error)
+                            </div>
+
+                            <div ng-if="netwrkData.manualConnected" class="alert alert-success" role="alert">Connected!</div>
+
+                            <!-- Loader -->
+                            <div class="loader" ng-if="netwrkData.beingManual">
+                                <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                            </div>
+
+                            <form name="forms.selectManualForm" ng-submit="submitManualNetwrk(forms.selectManualForm)"
+                                novalidate autocomplete="off">
+
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>SSID</label>
+                                        <input id="connectSelc" autocomplete="off" name="networkOpt" ng-model="netwrkData.selectManualForm.networkOpt"
+                                            placeholder="Enter SSID" required minlength="4">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row">
+                                    <md-input-container flex>
+                                        <label>Password</label>
+                                        <input autocomplete="new-password" name="networkpassword" ng-model="netwrkData.selectManualForm.networkpassword"
+                                            type="password" placeholder="Enter password" required minlength="4">
+                                    </md-input-container>
+                                </div>
+
+                                <div layout="row" layout-align="end">
+                                    <md-button type="submit" class="md-raised md-primary" ng-disabled="forms.selectManualForm.$invalid">Connect</md-button>
+                                </div>
+
+                            </form>
+
+                        </md-card-content>
+
+                    </md-card>
+                    <!-- ./Manual Connect -->
+
+
+                </div>
+                <div flex="40">
+                    <h3>&nbsp;</h3>
+                    <md-card class="wifiSetting">
+                        <md-card-content>
+
+
+                            <!-- Manually -->
+
+                            <div class="manualwifi">
+
+                                <form class="form-horizontal" name="forms.DHCPForm" ng-submit="submitDHCPNetwrk(forms.DHCPForm)"
+                                    novalidate autocomplete="off">
+
+                                    <md-switch ng-model="netwrkData.DHCPForm.networkdhcp" name="networkdhcp" required>
+                                        DHCP
+                                    </md-switch>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="ipaddress" placeholder="Ip Address" name="ipaddress" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                ng-model="netwrkData.DHCPForm.ipaddress" ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                ng-maxlength="12" ng-pattern="/^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/">
+                                            <div ng-messages="forms.DHCPForm.ipaddress.$error" multiple>
+                                                <div ng-message="required">This is required.</div>
+                                                <div ng-message="maxlength">maxlength not Okay.</div>
+                                                <div ng-message="pattern">pattern not Okay.</div>
+                                            </div>
+
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="subnetmask" placeholder="Subnet mask" name="subnetmask"
+                                                ng-disabled=netwrkData.DHCPForm.networkdhcp ng-model="netwrkData.DHCPForm.subnetmask"
+                                                required ng-required=!netwrkData.DHCPForm.networkdhcp ui-number-mask="0"
+                                                ui-hide-group-sep maxlength="12">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="gateway" placeholder="Gateway" name="gateway" ng-model="netwrkData.DHCPForm.gateway"
+                                                ng-disabled=netwrkData.DHCPForm.networkdhcp required ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                ui-number-mask="0" ui-hide-group-sep maxlength="12">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="dnserver" placeholder="DNS Server" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                name="dnserver" ng-model="netwrkData.DHCPForm.dnserver" required
+                                                ng-required=!netwrkData.DHCPForm.networkdhcp ui-number-mask="0"
+                                                ui-hide-group-sep maxlength="12">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="hostname" placeholder="Host name" name="hostname" ng-model="netwrkData.DHCPForm.hostname"
+                                                required ui-number-mask="0" ui-hide-group-sep maxlength="12">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row" layout-align="end">
+                                        <md-button type="submit" class="md-raised md-primary" ng-disabled="forms.DHCPForm.$invalid">Apply</md-button>
+                                        <md-button class="md-raised md-primary">Cancel</md-button>
+                                    </div>
+
+                                </form>
+                            </div>
+                            <!-- ./Manually -->
+                        </md-card-content>
+                    </md-card>
+                </div>
+            </div>
+
+        </div>
+
+    </uib-accordion-group>
+    <uib-accordion-group value="Auto Setting" csb-permissions ng-if="netwrkData.selectedOption==3" is-open="true">
+        <p>Auto Setting</p>
+    </uib-accordion-group>

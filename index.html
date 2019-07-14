@@ -11,6 +11,11 @@
 
 <body>
 
+    <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+        <md-nav-item md-nav-href="#setup" name="setup"> Setup </md-nav-item>
+        <md-nav-item md-nav-href="#network" name="network"> Network </md-nav-item>
+    </md-nav-bar>
+
     <ui-view></ui-view>
 
         
@@ -25,6 +30,7 @@
     <script src="js/ng/angular-material.min.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controller/network.controller.js"></script>
+    <script src="js/controller/setup.controller.js"></script>
     <script src="js/csb/csbquery.module.js"></script>
     <script src="js/service/network.service.js"></script>
     <script src="js/service/query.service.js"></script>

@@ -9,6 +9,13 @@ conext_gateway.config(function($stateProvider, $urlRouterProvider) {
       templateUrl: 'pages/network/network.html',
       controller: 'networkController'
     });
+    
+    $stateProvider
+    .state('setup', {
+      url: '/setup',
+      templateUrl: 'pages/setup/setup.html',
+      controller: 'setupController'
+    });
 
   $urlRouterProvider.otherwise('network');
 

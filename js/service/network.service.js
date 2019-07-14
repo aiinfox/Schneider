@@ -62,6 +62,9 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
         '/SCB/AP/ENABLE'
       ]
     };
+    
+    //private shared variable
+    var sharedVariables = { };
 
     var service = {
       getNetworkData: getNetworkData,
@@ -77,10 +80,27 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
       getConnections: getConnections,
       saveNetworkSettings: saveNetworkSettings,
       getNetworkSettings: getNetworkSettings,
-      saveManualSSIDSettings: saveManualSSIDSettings
+      saveManualSSIDSettings: saveManualSSIDSettings,
+      getSharedVariables : getSharedVariables,
+      setVariable: setVariable
     };
 
     return service;
+
+    
+
+    
+
+    ////////////////////////////////////////////////// 
+    //  Getter and Setters for Common Variables
+
+    //function declarations
+    function getSharedVariables(paramName) {
+        return sharedVariables[paramName];
+    }
+    function setVariable(paramName, value) {
+        sharedVariables[paramName] = value;
+    }    
 
     function getNetworkData() {
       return queryService.getSysvars(queryVars);

@@ -32,155 +32,186 @@ function(
     //
     // Network Mode
 
-    var vm = this;
-
-    $scope.forms = {};
+    $scope.forms = { };
+    $scope.netwrkData = [];
+    $scope.currentlyOpened = null;
     $scope.selectNetwrkFormData = {};
+    $scope.netwrkData.DHCPForm = [];
+    $scope.netwrkData.DHCPFormLan = [];
     
     $scope.status = {
-        isWifiOpen: false,
+        isFirstOpen: true,
         isCustomHeaderOpen: false,
         isFirstDisabled: false
     };
 
-    $scope.netwrkData = [];
-
-    /* GET API
-        $scope.netwrkData.availableOptions
-    */
-    $scope.netwrkData.availableOptions = [
-        { "id": "1", "name": "LAN" },
-        { "id": "2", "name": "WiFi" },
-        { "id": "3", "name": "Auto"}
-    ]
-    // $scope.netwrkData.selectedOption = $scope.netwrkData.availableOptions[1].id; //Default
-
-    
-
-
-    $scope.getNetworkSettingsData = [
-        { "values" : [{"name" : "/SCB/WIFI_STATION/SCAN_RESULTS_JSON","value" : "[{\"ssid\":\"ConextGateway_fe8708\",\"signal\":-17},{\"ssid\":\"ConextGateway_fe8756\",\"signal\":-36},{\"ssid\":\"ConextGateway_b07181\",\"signal\":-38},{\"ssid\":\"ConextGateway_b16f11\",\"signal\":-41},{\"ssid\":\"ConextGateway_b071b1\",\"signal\":-41},{\"ssid\":\"ConnectPeterA\",\"signal\":-47},{\"ssid\":\"ConextGateway_b0ff35\",\"signal\":-47},{\"ssid\":\"ConextGateway_b178b5\",\"signal\":-55},{\"ssid\":\"P5PT56HT93\",\"signal\":-58},{\"ssid\":\"P5PT56HT94\",\"signal\":-58},{\"ssid\":\"DeskPoT_9B9C02\",\"signal\":-64},{\"ssid\":\"P5PT56HT94\",\"signal\":-64},{\"ssid\":\"iPhone\",\"signal\":-66},{\"ssid\":\"P5PT56HT93\",\"signal\":-70},{\"ssid\":\"P5PT56HT94\",\"signal\":-70},{\"ssid\":\"P5PT56HT93\",\"signal\":-70},{\"ssid\":\"P5PT56HT94\",\"signal\":-71},{\"ssid\":\"P5PT56HT93\",\"signal\":-80}]","quality" : "G"}],"count" : 1,"OTK" : "405952f7aa735f6c7d148943113788b1502cb8218fab0e5d6132fc6d49556c65","responseTime" : 87}
-    ]
-
-    $scope.networkJsonData = [
-        { "values" : [{"name" : "/SCB/NETWORK/FEC0DHCP","value" : 1,"quality" : "G"},
-        {"name" : "/SCB/NETWORK/FEC0IPSHOW","value" : "10.167.90.101","quality" : "G"},
-        {"name" : "/SCB/NETWORK/FEC0NETMASK","value" : "0","quality" : "G"},
-        {"name" : "/SCB/NETWORK/DEFAULTGW","value" : "0","quality" : "G"},
-        {"name" : "/SCB/NETWORK/DNSSERVER","value" : "0","quality" : "G"},
-        {"name" : "HOSTNAME","value" : "cb-SESA126462","quality" : "G"},
-        {"name" : "MAILER/ENABLE","value" : 0,"quality" : "G"},
-        {"name" : "MAILER/SERVER_NAME","value" : "","quality" : "G"},
-        {"name" : "MAILER/SERVERPORT","value" : 25,"quality" : "G"},
-        {"name" : "MAILER/USERID","value" : "","quality" : "G"},
-        {"name" : "AUTHMAIL/RECIPIENT","value" : "","quality" : "G"},
-        {"name" : "FTPLOG/ENABLE","value" : 0,"quality" : "G"},
-        {"name" : "FTPLOG/DEST_ADDR","value" : "","quality" : "G"},
-        {"name" : "FTPLOG/USERNAME","value" : "","quality" : "G"},
-        {"name" : "FTPLOG/PASSWORD","value" : "","quality" : "G"},
-        {"name" : "FTPLOG/DEST_DIR","value" : "","quality" : "G"},
-        {"name" : "WEBPORTAL/SYNC_ENABLE","value" : 0,"quality" : "G"},
-        {"name" : "WEBPORTAL/SYNC_STRING","value" : "","quality" : "G"},
-        {"name" : "WEBPORTAL/ENABLE","value" : 1,"quality" : "G"},
-        {"name" : "WEBPORTAL/LAST_TRANSFER_TIME","value" : "","quality" : "G"},
-        {"name" : "WEBPORTAL/STATUS","value" : 0,"quality" : "G"},
-        {"name" : "WEBPORTAL/UNSENT_PACKET_COUNT","value" : "0","quality" : "G"},
-        {"name" : "ADMIN/DISCLCHECK","value" : 1,"quality" : "G"},
-        {"name" : "/SCB/IOT/ENABLE","value" : 1,"quality" : "G"},
-        {"name" : "/SCB/IOT/ISCONNECTED","value" : 1,"quality" : "G"},
-        {"name" : "/SCB/IOT/LAST_TRANSFER_TIME","value" : "2017-12-15T17:14:11-0800","quality" : "G"},
-        {"name" : "/SCB/FTP/ENABLE","value" : 0,"quality" : "G"}],"count" : 27,"responseTime" : 271}
-
-    ]
-
-    /* GET API
-        $scope.getConnections
-    */
-
-    /* GET API
-        $scope.netwrkData.availableNetworks
-    */
-
-$scope.netwrkData.availableNetworks = [
-        { "item": "Network 1" },
-        { "item": "Network 2" },
-        { "item": "Network 3" },
-        { "item": "Network 4" },
-        { "item": "Network 5" },
-        { "item": "Network 6" }
-    ]
-
-    $scope.getWifiSettings = function(){
-        gatewayNetworkService.getNetworkSettings().then(function(response){
-            // console.log(response);
-            $scope.netwrkData.DHCPForm.ipaddress =  response.SCB_NETWORK_TIW_STA0IP;
-            $scope.netwrkData.DHCPForm.subnetmask =  response.SCB_NETWORK_TIW_STA0NETMASK;
-            $scope.netwrkData.DHCPForm.networkdhcp =  response.SCB_NETWORK_TIW_STA0DHCP;
-            $scope.netwrkData.DHCPForm.gateway =  response.SCB_NETWORK_TIW_STA0IPSHOW;
-            $scope.netwrkData.DHCPForm.dnserver =  response.SCB_NETWORK_TIW_STA0MACADDRESS;
-            $scope.netwrkData.DHCPForm.hostname =  response.SCB_NETWORK_TIW_STA0NETMASKSHOW;
-        });
-    }
-    $scope.connCount = 0;
-    $scope.getConnections = function(){
-        console.log('getConnections')
-        gatewayNetworkService.getConnections().then(function(response){
+    $scope.queryWifiSettings = function() {
+      var deferred = $q.defer();
+          gatewayNetworkService.getConnections().then(function(response){
+              console.log(response)
             var res = JSON.parse(response.SCB_WIFI_STATION_SCAN_RESULTS_JSON);
+            $scope.netwrkData.connectedSSID = response.SCB_WIFI_STATION_SSID;
+            $scope.netwrkData.ssidStatus = response.SCB_WIFI_STATION_STATUS;
             /* Check the response data */
             if (angular.isObject(res)) {
-                /* Return data */
-                if(angular.isDefined($scope.netwrkData.netConnected) && angular.isDefined($scope.netwrkData.connectedIndex) && $scope.netwrkData.connectedIndex != null) {
-                    var connectedSSID = $filter('filter')(res, {ssid: $scope.netwrkData.availableConnections[$scope.netwrkData.connectedIndex].ssid}, true)[0];
-                    if(angular.isUndefined(connectedSSID)){
-                        console.log('!!Disconnected!')
-                        $scope.onDisconnect($scope.netwrkData.connectedIndex);
-                        $scope.netwrkData.showDisconnectErr = true;
-                    }
-                }
-
-                $scope.netwrkData.availableConnections = res;
-                angular.forEach($scope.netwrkData.availableConnections, function(value, key) {
-                    if(value.signal <= -80) {
-                        value.signal = 1;
-                    } else 
-                    if(value.signal > -80 && value.signal <=-70) {
-                        value.signal = 2;
-                    } else {
-                        value.signal = 3;
-                    }
-                });
-
-                $scope.connCount++;
-                if($scope.connCount < 2){
-                    //check if connection is active
-                    if(angular.isDefined(gatewayNetworkService.getSharedVariables('selectNetwrkFormConnected'))){
-                        var index = gatewayNetworkService.getSharedVariables('selectNetwrkFormConnected');
-                        $scope.netwrkData.connectedIndex = index;
-                        $scope.netwrkData.netConnected = true;
-                    }
-                }
-                return res;
+              $scope.netwrkData.availableConnections = res;
+              angular.forEach($scope.netwrkData.availableConnections, function(value, key) {
+                if(value.signal <= -80) 
+                  value.signal = 1;
+                else if(value.signal > -80 && value.signal <= -70)
+                  value.signal = 2;
+                else
+                  value.signal = 3;
+              });
+              deferred.resolve();
             }
-        });
+          });
+          return deferred.promise;
     }
 
-    $scope.getConnections();
-    var clearGetConnInter;
-    if(angular.isDefined($scope.status.isWifiOpen)) {
-        $scope.$watch('status.isWifiOpen', function (newval, oldval) {
-            if(newval != oldval && newval == true){
-                $scope.getWifiSettings();
-                $scope.netwrkData.DHCPFormObj = {};
-                $scope.netwrkData.DHCPFormObj = angular.copy($scope.forms.DHCPForm);
-                $scope.watchnetworkdhcp();
-                clearGetConnInter = $interval(function() { $scope.getConnections(); },1000);
-            } else if( newval == false) {
-                $interval.cancel(clearGetConnInter);
-                $scope.clearGetConnInter = null;
-            }
-        });
+    $scope.getNetworkMode = function() {
+      gatewayNetworkService.getNetworkMode().then(function(response){
+          $scope.netwrkData.connectedMode = response.SCB_NETWORK_ACTIVE;
+          if( $scope.netwrkData.connectedMode == "WIFI") {
+            $scope.netwrkData.isLanConnected = false;
+            $scope.netwrkData.isLanMode = false;
+          }
+          else {
+            $scope.netwrkData.isLanConnected = true;
+            $scope.netwrkData.isLanMode = true;
+          }
+      });
     }
-    
+
+    $scope.showTick = function() {
+      var defered = $q.defer();
+      gatewayNetworkService.getNetworkMode().then(function(response){
+          console.log(response)
+        $scope.netwrkData.connectedMode = response.SCB_NETWORK_ACTIVE;
+        if( $scope.netwrkData.connectedMode == "WIFI") {
+          $scope.netwrkData.isLanConnected = false;
+          $scope.netwrkData.isLanMode = false;
+
+        $scope.queryWifiSettings().then(function(res){
+            $scope.indexOfSSID();
+            $scope.netwrkData.isLanMode = false;
+            $scope.netwrkData.isLanConnected = false;
+            $scope.netwrkData.readOnlyLanMode = false;
+            defered.resolve();
+          });
+        }
+        else {
+          $scope.queryWifiSettings().then(function(res){
+            defered.resolve();
+          });
+          $scope.netwrkData.isLanConnected = true;
+          $scope.netwrkData.isLanMode = true;
+          $scope.netwrkData.readOnlyLanMode = true;
+          $scope.netwrkData.netConnected = true;
+        }
+      });
+      return defered.promise;
+
+  }
+
+    $scope.indexOfSSID = function() {
+      var indx=0;
+      angular.forEach($scope.netwrkData.availableConnections, function(value, key) {
+        if(value.ssid === $scope.netwrkData.connectedSSID && $scope.netwrkData.ssidStatus == "COMPLETED"){
+          $scope.netwrkData.connectedIndex = key;
+          $scope.netwrkData.netConnected = true;
+          return;
+        }
+        indx++;
+      });
+    }
+
+    $scope.setNetworkMode = function(req) {
+      var deferred = $q.defer();
+      $scope.showTick().then(function(){
+            deferred.resolve();
+      });
+      return deferred.promise;
+    }
+
+    $scope.getWifiDHCP = function() {
+      gatewayNetworkService.getWifiNetworkSettings().then(function(response){
+        if(response.SCB_NETWORK_TIW_STA0DHCP == 1){
+          $scope.netwrkData.DHCPForm.ipaddress =  response.SCB_NETWORK_TIW_STA0IPSHOW;
+          $scope.netwrkData.DHCPForm.subnetmask =  response.SCB_NETWORK_TIW_STA0NETMASKSHOW;
+          $scope.netwrkData.DHCPForm.networkdhcp = true;
+        }
+        else{
+          $scope.netwrkData.DHCPForm.ipaddress =  response.SCB_NETWORK_TIW_STA0IP;
+          $scope.netwrkData.DHCPForm.subnetmask =  response.SCB_NETWORK_TIW_STA0NETMASK;
+          $scope.netwrkData.DHCPForm.networkdhcp = false;
+        }
+        
+        $scope.netwrkData.DHCPForm.gateway =  response.ETH0_TCPIP_DHCP_GWAY;
+        $scope.netwrkData.DHCPForm.dnserver =  response.SCB_NETWORK_DNSSERVER;
+        $scope.netwrkData.DHCPForm.hostname =  response.HOSTNAME;
+      });
+    }
+
+    $scope.getLanDHCP = function() {
+      gatewayNetworkService.getLanNetworkSettings().then(function(response){
+        if(response.SCB_NETWORK_DM0DHCP == 1){
+            $scope.netwrkData.DHCPFormLan.ipaddress =  response.SCB_NETWORK_DM0IPSHOW;
+            $scope.netwrkData.DHCPFormLan.subnetmask =  response.SCB_NETWORK_DM0NETMASKSHOW;
+            $scope.netwrkData.DHCPFormLan.networkdhcp = true;
+        }
+        else {
+          $scope.netwrkData.DHCPFormLan.ipaddress =  response.SCB_NETWORK_DM0IP;
+          $scope.netwrkData.DHCPFormLan.subnetmask =  response.SCB_NETWORK_DM0NETMASK;
+          $scope.netwrkData.DHCPFormLan.networkdhcp = false;
+        }
+        
+        $scope.netwrkData.DHCPFormLan.gateway =  response.ETH0_TCPIP_DHCP_GWAY;
+        $scope.netwrkData.DHCPFormLan.dnserver =  response.SCB_NETWORK_DNSSERVER;
+        $scope.netwrkData.DHCPFormLan.hostname =  response.HOSTNAME;
+      });
+    }
+
+    $scope.checkIEEE = function(){
+      gatewayNetworkService.getIEEEStatus().then(function(res){
+        $scope.ieee_settings.SCB_2030_STATUS = res.SCB_2030_STATUS;
+      })
+    };
+
+    /* Start scanning the available connections every minute*/
+    $scope.setNetworkScan = function() {
+      gatewayNetworkService.setScan().then(function(){
+
+        $scope.showTick().then(function(){
+          $interval(function(){
+              $scope.showTick();
+          }, 60000);
+       
+        });
+      });
+    }
+
+    $scope.toggleDHCP = function(data){
+      switch(data){
+        case 'LAN':
+          {
+            $scope.netwrkData.isLanConnected = true;
+            break;
+          }
+        case 'WIFI': 
+        {
+          $scope.netwrkData.isLanConnected = false;
+          break;
+        }
+      }
+    }
+
+    $scope.checkIEEEStatus = function(){ 
+        $interval(function() {
+          $scope.checkIEEE();
+        },60000);
+    }
+
     $scope.onConnect = function($index){
         $scope.toggleNetworkScreen = [];
         $scope.netwrkData.readOnlyMode = [];
@@ -188,6 +219,7 @@ $scope.netwrkData.availableNetworks = [
         $scope.toggleNetworkScreen[$index] = true;
         $scope.toggleManualScreen = false;
         $scope.currentlyOpened = $index;
+        $scope.netwrkData.isLanConnected = false;
         
         $timeout(function(){ // Due to Animation
             $scope.netwrkData.selectNetwrkForm = [];
@@ -195,260 +227,302 @@ $scope.netwrkData.availableNetworks = [
             $scope.netwrkData.selectNetwrkForm.ssid = $scope.netwrkData.availableConnections[$index].ssid;
         });
 
-        if($scope.netwrkData.connectedIndex === $index && $scope.netwrkData.netConnected) {
+        if($scope.netwrkData.connectedIndex === $index && $scope.netwrkData.selectNetwrkForm && $scope.netwrkData.netConnected) {
             $scope.netwrkData.readOnlyMode[$index] = true;
         } else {
             $scope.netwrkData.readOnlyMode[$index] = false;
         }
     };
 
-    $scope.onDisconnectOrig = function($index){
-        $scope.selectNetwrkFormReset($index);
-        $scope.netwrkData.netConnected = false;
-        $scope.active = null;
-        $scope.toggleNetworkScreen[$index] = false;
-        // $scope.toggleNetworkScreen[$index] = false;
-        $scope.currentlyOpened = null;
-    };
-
-    $scope.onClose = function($index){
-        $scope.active = null;
-        $scope.active = $scope.active == $scope.netwrkData.connectedIndex ? '': $scope.netwrkData.connectedIndex;
-        $scope.selectNetwrkFormReset($index);
-        $scope.toggleNetworkScreen[$index] = false;
-        // $scope.toggleNetworkScreen[$index] = false;
-        $scope.currentlyOpened = null;
-    };
+    $scope.onLanConnect = function() {
+      $scope.netwrkData.toggleLanScreen = true;
+      $scope.netwrkData.isLanConnected = true;
+      $scope.active = '';
+      
+      $timeout(function(){ // Due to Animation
+          $scope.netwrkData.selectLanNetwrkForm = [];
+          $scope.netwrkData.selectLanNetwrkForm.push($scope.forms.selectLanNetwrkForm);
+      });
+    }
 
     $scope.onDisconnect = function($index){
-        $scope.netwrkData.readOnlyMode[$index] = false;
-        // $scope.netwrkData.selectNetwrkForm.ssid = null;
-        $scope.netwrkData.netConnected = false;
-        $scope.toggleNetworkScreen[$index] = false;
-        gatewayNetworkService.setVariable('selectNetwrkFormConnected', null); //setting value in service variable
-    }
+      $scope.selectNetwrkFormReset($index);
+      $scope.netwrkData.netConnected = false;
+      $scope.active = null;
+      $scope.toggleNetworkScreen[$index] = true;
+      $scope.toggleNetworkScreen[$index] = false;
+      $scope.currentlyOpened = null;
+  };
 
-    $scope.addManully = function($index, anchrCard) {
-        $scope.toggleManualScreen = true;
-        // $scope.selectNetwrkFormReset($index);
-        if($scope.currentlyOpened != null) {
-            $scope.onClose($index);
+  $scope.onClose = function($index){
+      $scope.active = null;
+      $scope.active = $scope.active == $scope.netwrkData.connectedIndex ? '': $scope.netwrkData.connectedIndex;
+      $scope.selectNetwrkFormReset($index);
+      $scope.toggleNetworkScreen[$index] = true;
+      $scope.toggleNetworkScreen[$index] = false;
+      $scope.currentlyOpened = null;
+  };
+
+  $scope.onLanClose = function() {
+    $scope.active = null;
+    $scope.active = $scope.active == $scope.netwrkData.connectedIndex ? '': $scope.netwrkData.connectedIndex;
+    $scope.currentlyOpened = null;
+    $scope.netwrkData.toggleLanScreen = false;
+  }
+
+  $scope.onReconnect = function($index){
+      $scope.netwrkData.readOnlyMode[$index] = false;
+      $scope.netwrkData.netConnected = false;
+  }
+
+  $scope.onLanReconnect = function() {
+    $scope.netwrkData.netConnected = false;
+  }
+
+  $scope.addManully = function($index, anchrCard) {
+      $scope.toggleManualScreen = true;
+      if($scope.currentlyOpened!=null) {
+        $scope.onClose($index);
+      }
+      $timeout(function(){ $scope.gotoAnchor(anchrCard) }) // Due to Animation
+  }
+
+  $scope.selectNetwrkFormReset = function(i) {
+    $scope.forms.selectNetwrkForm[i].$setPristine();
+    $scope.forms.selectNetwrkForm[i].$setUntouched();
+    $scope.netwrkData.selectNetwrkForm = angular.copy({});
+}
+
+$scope.submitManualNetwrk = function(manualForm){
+  if(manualForm.$valid){
+      var networkOpt = manualForm.networkOpt.$viewValue;
+      var networkpassword = manualForm.networkpassword.$viewValue;
+      var manualFormData= { 
+          'networkOpt': networkOpt, 
+          'networkpassword': networkpassword
+      }
+
+      var defered = $q.defer();
+      $scope.netwrkData.beingManual = true;
+      defered.resolve(manualFormData);
+      
+          $timeout(function(){ // Simulate the API experience
+              gatewayNetworkService.saveManualSSIDSettings(manualFormData).then(function() {
+
+                $scope.setNetworkMode("WiFi").then(function(){
+                  $scope.netwrkData.beingManual = false;
+                  $scope.netwrkData.manualConnected = true;
+
+                  $scope.reset();
+                  $timeout(function(){
+                      $scope.netwrkData.manualConnected = false;
+                      $scope.toggleManualScreen = false;
+                  },500)
+
+                });
+            });
+          },500);
+
+      // Reset Form
+      $scope.reset = function() {
+          $scope.netwrkData.selectManualForm = angular.copy({});
+          $scope.forms.selectManualForm.$setPristine();
+          $scope.forms.selectManualForm.$setUntouched();
+      };
+  }
+
+} 
+
+$scope.submitLanNetwork = function(data) {
+  var selectNetwrkForm = $scope.forms.selectLanNetwrkForm;
+  var ssid, networkpassword;
+  $scope.master = {};
+  $scope.netwrkData.beingEvalLan = {};
+  if(selectNetwrkForm.$valid){
+
+    var defered = $q.defer();
+    defered.resolve($scope.master);
+    $scope.netwrkData.beingEvalLan = true;
+
+    $timeout(function(){ // Simulate the API experience
+              if(data == 'Disconnect'){
+                  $scope.setNetworkMode("WiFi").then(function(){
+                    $scope.netwrkData.beingEvalLan = false;
+                    $scope.netwrkData.netConnected = true;
+                  });
+              }
+              else {
+                $scope.setNetworkMode("LAN").then(function(){
+                      $scope.netwrkData.beingEvalLan = false;
+                      $scope.netwrkData.connectedIndex = {};
+                      $scope.netwrkData.netConnected = true;
+                 });
+              }
+          
+            $scope.reset();
+      },1000);     
+
+
+      $scope.reset = function() {
+          $scope.selectLanNetwrkFormData = angular.copy($scope.master);
+          $scope.forms.selectLanNetwrkForm.$setPristine();
+          $scope.forms.selectLanNetwrkForm.$setUntouched();
+          $timeout(function(){$scope.toggleNetworkScreen = false},1000) // Simulate the API experience
+      };
+  }
+}
+
+$scope.submitSelectNetwrk = function(i){
+
+    var selectNetwrkForm = $scope.forms.selectNetwrkForm[i];
+    var ssid, networkpassword;
+    $scope.master = {};
+    $scope.netwrkData.beingEval = [];
+    if(selectNetwrkForm.$valid){
+        if(selectNetwrkForm.ssid != undefined && selectNetwrkForm.ssid != null ){
+            ssid = selectNetwrkForm.ssid.$viewValue;
+            networkpassword = selectNetwrkForm.networkpassword.$viewValue;
+            $scope.master = { 'ssid': ssid, 'networkpassword': networkpassword }
         }
-        $timeout(function(){ $scope.gotoAnchor(anchrCard) }) // Because of Animation
-    }
 
-    $scope.selectNetwrkFormReset = function(i) {
-        if(angular.isDefined($scope.forms.selectNetwrkForm[i])) {
+        var defered = $q.defer();
+        defered.resolve($scope.master);
+        $scope.netwrkData.beingEval[i] = true;
+
+            $timeout(function(){ 
+              gatewayNetworkService.saveSelectSSIDSettings($scope.master).then(function() {
+                $scope.setNetworkMode("WIFI").then(function(){
+                  $scope.netwrkData.beingEval[i] = false;
+                  $scope.reset();
+                });
+              });
+            },1000);     
+
+
+        $scope.reset = function() {
+            $scope.selectNetwrkFormData = angular.copy($scope.master);
+            $scope.netwrkData.selectNetwrkForm.ssid = null;
+            $scope.netwrkData.selectNetwrkForm.networkpassword = null;
             $scope.forms.selectNetwrkForm[i].$setPristine();
             $scope.forms.selectNetwrkForm[i].$setUntouched();
-            $scope.netwrkData.selectNetwrkForm = angular.copy({});
-        }
-    }
-
-    $scope.submitManualNetwrk = function(manualForm){
-    if(manualForm.$valid){
-        var networkOpt = manualForm.networkOpt.$viewValue;
-        var networkpassword = manualForm.networkpassword.$viewValue;
-        var manualFormData= { 
-            'networkOpt': networkOpt, 
-            'networkpassword': networkpassword
-        }
-
-        /* 
-            POST Request
-            data: $scope.netwrkData.DHCPFormData
-        */
-        //  POST Request
-        gatewayNetworkService.saveManualSSIDSettings(manualFormData).then(function() {
-            $scope.forms.DHCPForm.$setPristine();
-            // formSuccessMessageService.show($scope, "lan_settings");
-            $scope.onDisconnect($scope.netwrkData.connectedIndex);
-        },
-        function() {
-            $scope.errorMessage.lan_settings = $filter('translate')('setup.network.save_failed');
-        });
-
-
-        var promise = $q(function(resolve, reject){
-            console.log(manualFormData)
-            $scope.netwrkData.beingManual = true;
-            resolve(manualFormData);
-        });
-            
-        promise.then(function(res){
-            $timeout(function(){ // Simulate the API experience
-                // $scope.onReconnect($scope.netwrkData.connectedIndex);
-                $scope.netwrkData.beingManual = false;
-                $scope.netwrkData.manualConnected = true;
-                $scope.reset();
-                $timeout(function(){
-                    $scope.netwrkData.manualConnected = false;
-                    $scope.toggleManualScreen = false;
-                },500)
-            },500);     
-        });
-
-        // Reset Form
-        $scope.reset = function() {
-            $scope.netwrkData.selectManualForm = angular.copy({});
-            $scope.forms.selectManualForm.$setPristine();
-            $scope.forms.selectManualForm.$setUntouched();
+            $timeout(function(){$scope.toggleNetworkScreen = false},1000) // Simulate the API experience
         };
     }
+} 
 
-    }
+$scope.submitDHCPNetwrk = function(DHCPForm){
+  if(DHCPForm.$valid){
+      var ipaddress = DHCPForm.ipaddress.$viewValue;
+      var networkdhcp = DHCPForm.networkdhcp.$viewValue;
+      var subnetmask = DHCPForm.subnetmask.$viewValue;
+      var gateway = DHCPForm.gateway.$viewValue;
+      var dnserver = DHCPForm.dnserver.$viewValue;
+      var hostname = DHCPForm.hostname.$viewValue;
+      var DHCPFormData = { 
+          'ipaddress': ipaddress, 
+          'networkdhcp': networkdhcp ,
+          'subnetmask': subnetmask ,
+          'gateway': gateway ,
+          'dnserver': dnserver ,
+          'hostname': hostname ,
+      }
 
-    $scope.submitSelectNetwrk = function(i){
+       
+     //  POST Request
+      gatewayNetworkService.saveDHCPWifi(DHCPFormData).then(function() {
+        $scope.forms.DHCPForm.$setPristine();
+      },
+      function() {
+       // TODO: $scope.errorMessage.lan_settings = $filter('translate')('setup.network.save_failed');
+      });
 
-        // Test
-        
-        $scope.netwrkData.connectedIndex = i;
-        $scope.netwrkData.netConnected = true;
+      var defered = $q.defer();
+      defered.resolve(DHCPFormData);
+      $scope.reset();      
 
-        // Test
-
-        var selectNetwrkForm = $scope.forms.selectNetwrkForm[i];
-        var ssid, networkpassword;
-        $scope.master = {};
-        $scope.netwrkData.beingEval = [];
-        if(selectNetwrkForm.$valid){
-
-            if(selectNetwrkForm.ssid != undefined && selectNetwrkForm.ssid != null ){
-                ssid = selectNetwrkForm.ssid.$viewValue;
-                networkpassword = selectNetwrkForm.networkpassword.$viewValue;
-                $scope.master = { 'ssid': ssid, 'networkpassword': networkpassword }
-            }
-
-            /* 
-                POST Request
-                data: $scope.netwrkData.selectNetwrkFormData
-            */
-            //  POST Request
-            gatewayNetworkService.saveManualSSIDSettings($scope.master).then(function() {
-                $scope.forms.DHCPForm.$setPristine();
-                // formSuccessMessageService.show($scope, "lan_settings");
-                gatewayNetworkService.setVariable('selectNetwrkFormConnected', i); //setting value in service variable
-            },
-            function() {
-                $scope.errorMessage.lan_settings = $filter('translate')('setup.network.save_failed');
-            });
-
-            var promise = $q(function(resolve, reject){
-                resolve($scope.master);
-                $scope.netwrkData.beingEval[i] = true;                
-                $scope.netwrkData.showDisconnectErr = false;
-            });
-                
-            promise.then(function(res){
-                $timeout(function(){ // Simulate the API experience
-                    $scope.netwrkData.beingEval[i] = false;
-                    $scope.netwrkData.connectedIndex = i;
-                    $scope.netwrkData.netConnected = true;
-                    $scope.reset();
-                },1000);     
-            });
-
-            $scope.reset = function() {
-                $scope.selectNetwrkFormData = angular.copy($scope.master);
-                $scope.netwrkData.selectNetwrkForm.ssid = null;
-                $scope.netwrkData.selectNetwrkForm.networkpassword = null;
-                $scope.forms.selectNetwrkForm[i].$setPristine();
-                $scope.forms.selectNetwrkForm[i].$setUntouched();
-                $timeout(function(){$scope.toggleNetworkScreen[i] = false},1000) // Simulate the API experience
-            };
-        }
-    } 
-
-    $scope.submitDHCPNetwrk = function(DHCPForm){
-        if(DHCPForm.$valid){
-            var ipaddress = DHCPForm.ipaddress.$viewValue;
-            var networkdhcp = DHCPForm.networkdhcp.$viewValue;
-            var subnetmask = DHCPForm.subnetmask.$viewValue;
-            var gateway = DHCPForm.gateway.$viewValue;
-            var dnserver = DHCPForm.dnserver.$viewValue;
-            var hostname = DHCPForm.hostname.$viewValue;
-            var DHCPFormData = { 
-                'ipaddress': ipaddress, 
-                'networkdhcp': networkdhcp ,
-                'subnetmask': subnetmask ,
-                'gateway': gateway ,
-                'dnserver': dnserver ,
-                'hostname': hostname ,
-            }
-
-            
-            //  POST Request
-            gatewayNetworkService.saveNetworkSettings(DHCPFormData).then(function() {
-                $scope.reset();
-                console.log(DHCPFormData)
-                // formSuccessMessageService.show($scope, "lan_settings");
-            },
-            function() {
-                $scope.errorMessage.lan_settings = $filter('translate')('setup.network.save_failed');
-            });
-            
-
-            /* var promise = $q(function(resolve, reject){
-                console.log(DHCPFormData)
-                resolve(DHCPFormData);
-            });
-                
-            promise.then(function(res){
-                $scope.reset();      
-            }); */
-
-            // Reset Form
-            $scope.reset = function() {
-                $scope.netwrkData.DHCPFormObj = angular.copy({});
-                $scope.forms.DHCPForm.$setPristine();
-                $scope.forms.DHCPForm.$setUntouched();
-                // $scope.toggleNetworkScreen = false;
-            };
-        }
-    }
-
-    $scope.watchnetworkdhcp = function(){
-        if(angular.isDefined($scope.netwrkData.DHCPFormObj)){
-            $scope.$watch('netwrkData.DHCP.networkdhcp', function (newval, oldval) {
-                if(newval != oldval && newval == true){
-                    $scope.netwrkData.DHCP.ipaddress = null;
-                    $scope.netwrkData.DHCP.subnetmask = null;
-                    $scope.netwrkData.DHCP.gateway = null;
-                    $scope.netwrkData.DHCP.dnserver = null;
-                    $scope.forms.DHCPForm.$setPristine();
-                    $scope.forms.DHCPForm.$setUntouched();
-                }
-            });
-        }
-    }
-
-    $scope.gotoAnchor = function(x) {
-        var newHash = x;
-        if ($location.hash() !== newHash) {
-        // set the $location.hash to `newHash` and
-        // $anchorScroll will automatically scroll to it
-        $location.hash(x);
-        } else {
-        // call $anchorScroll() explicitly,
-        // since $location.hash hasn't changed
-        $anchorScroll();
-        }
-    }
-
+      // Reset Form
+      $scope.reset = function() {
+          $scope.netwrkData.DHCPForm = angular.copy({});
+          $scope.forms.DHCPForm.$setPristine();
+          $scope.forms.DHCPForm.$setUntouched();
+      };
+  }
 }
-])
-.config(function($mdThemingProvider) { 
-$mdThemingProvider.theme('default')
-    .primaryPalette('green', {
-        'default': '400', // by default use shade 400 from the pink palette for primary intentions
-        'hue-1': '100', // use shade 100 for the <code>md-hue-1</code> class
-        'hue-2': '600', // use shade 600 for the <code>md-hue-2</code> class
-        'hue-3': 'A100' // use shade A100 for the <code>md-hue-3</code> class
-    })
-    // If you specify less than all of the keys, it will inherit from the
-    // default shades
-    .accentPalette('green', {
-        'default': '400' // use shade 200 for default, and keep all other shades the same
-    });
 
+$scope.submitLanDHCPNetwrk = function(DHCPFormLan){
+  if(DHCPFormLan.$valid){
+      var ipaddress = DHCPFormLan.ipaddress.$viewValue;
+      var networkdhcp = DHCPFormLan.networkdhcp.$viewValue;
+      var subnetmask = DHCPFormLan.subnetmask.$viewValue;
+      var gateway = DHCPFormLan.gateway.$viewValue;
+      var dnserver = DHCPFormLan.dnserver.$viewValue;
+      var hostname = DHCPFormLan.hostname.$viewValue;
+      var DHCPFormData = { 
+          'ipaddress': ipaddress, 
+          'networkdhcp': networkdhcp ,
+          'subnetmask': subnetmask ,
+          'gateway': gateway ,
+          'dnserver': dnserver ,
+          'hostname': hostname ,
+      }
+
+       
+     //  POST Request
+      gatewayNetworkService.saveDHCPLan(DHCPFormData).then(function() {
+        $scope.forms.DHCPFormLan.$setPristine();
+      },
+      function() {
+       //TODO: $scope.errorMessage.lan_settings = $filter('translate')('setup.network.save_failed');
+      });
+      
+      var deferred = $q.defer();
+      deferred.resolve(DHCPFormData);
+      $scope.reset();      
+
+      // Reset Form
+      $scope.reset = function() {
+          $scope.netwrkData.DHCPFormLan = angular.copy({});
+          $scope.forms.DHCPFormLan.$setPristine();
+          $scope.forms.DHCPFormLan.$setUntouched();
+      };
+  }
+}
+
+/* Found an issue with this watch during page load */
+
+$scope.$watch('netwrkData.DHCPForm.networkdhcp', function(newval, oldval){
+  if(newval != oldval && newval ==true){
+    $scope.netwrkData.DHCPForm.ipaddress = null;
+    $scope.netwrkData.DHCPForm.subnetmask = null;
+    $scope.netwrkData.DHCPForm.gateway = null;
+    $scope.netwrkData.DHCPForm.dnserver = null;
+    $scope.forms.DHCPForm.$setPristine();
+    $scope.forms.DHCPForm.$setUntouched();
+  }
 });
+
+$scope.$watch('netwrkData.DHCPFormLan.networkdhcp', function(newval, oldval){
+  if(newval != oldval && newval ==true){
+    $scope.netwrkData.DHCPFormLan.ipaddress = null;
+    $scope.netwrkData.DHCPFormLan.subnetmask = null;
+    $scope.netwrkData.DHCPFormLan.gateway = null;
+    $scope.netwrkData.DHCPFormLan.dnserver = null;
+    $scope.forms.DHCPFormLan.$setPristine();
+    $scope.forms.DHCPFormLan.$setUntouched();
+  }
+});
+
+/* Starting function calls */
+$scope.getWifiDHCP();
+$scope.getLanDHCP();
+$scope.setNetworkScan();
+$scope.gotoAnchor = function(x) {
+    var newHash = x;
+    if ($location.hash() !== newHash) {
+      $location.hash(x);
+    } else {
+      $anchorScroll();
+    }
+  }
+}
+]);

@@ -160,11 +160,11 @@ angular.module('conext_gateway').factory('queryService', [
         var sysvarNameMangled = mangleSysvarName(sysvarNameRaw, options);
         var sysvarInfo = lookupSysvar(data, sysvarNameRaw);
         if (sysvarInfo === null) {
-          if (queryConfigService.willCheckForMissingSysvars()) {
+          /* if (queryConfigService.willCheckForMissingSysvars()) {
             var ex = new Error("missing sysvar");
             ex.sysvar = sysvarNameRaw;
             throw ex;
-          }
+          } */
           // else, silently fail
         } else {
           response[sysvarNameMangled] = sysvarInfo.value;

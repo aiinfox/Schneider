@@ -1,24 +1,46 @@
 <div style="padding: 25px 0;" uib-accordion class="container">
-    <uib-accordion-group class="panel-default" heading="Network settings" csb-permissions ng-click="isWifiOpen(status.isWifiOpen = !status.isWifiOpen)" is-open="status.isWifiOpen">
+    <uib-accordion-group class="panel-default" heading="Network settings" csb-permissions is-open="true">
+
         <!-- todo: learn what these are -->
         <div class="install-package" filters="queueLimit">
 
             <div layout="row">
 
                 <div flex="60">
-
-                    <div ng-if="netwrkData.showDisconnectErr" class="alert alert-danger" role="alert">Connect Lost</div>
-
+                    <!-- <h3><i class="material-icons lanconn">cast_connected</i>LAN Connection</h3>                 -->
                     <md-card class="wifiSetting">
                         <md-card-content class="no-padd">
-
                             <!-- Available networks -->
+                            <!-- <h3>Available Connections</h3> -->
+
                             <div class="available-networks">
+                                <div ng-if="netwrkData.showDisconnectErr" class="alert alert-danger" role="alert">Connect
+                                    Lost</div>
 
                                 <div class="connectioncontainer">
+                                    <div class="listconnection">
+                                        <a class="head" style="font-size: large;" ng-click="toggleDHCP('LAN')">
+                                            <span class="mdi mdi-lan"></span>
+                                            <span> Ethernet connection </span>
+                                            <span ng-if="netwrkData.netConnected && netwrkData.readOnlyLanMode && netwrkData.isLanMode">
+                                                <span class="mdi mdi-check connected"></span>
+                                            </span>
+                                            <!-- <form name="forms.selectLanNetwrkForm" class="buttonAlign" novalidate autocomplete="off">
+                                  
+                                    <div layout="row" layout-align="end">
+                                        <md-button ng-click = "onLanConnect(); submitLanNetwork('Connect')" class="md-raised md-primary" ng-disabled="forms.selectLanNetwrkForm.$invalid" ng-if="!netwrkData.readOnlyLanMode">Connect</md-button>
+                                        <md-button ng-click = "onLanReconnect(); submitLanNetwork('Disconnect')" class="md-raised md-primary" ng-if="netwrkData.readOnlyLanMode">Disconnect</md-button>
+                                    </div>
+
+                                </form> -->
+                                        </a>
+
+                                    </div>
+
+
                                     <div class="listconnection" ng-class="{ 'active': active == $index}" ng-repeat="model in netwrkData.availableConnections track by $index">
-                                        <a class="head" ng-click="onConnect($index)">
-                                            <span class="mdi mdi-wifi locksignal" ng-class="{ 'mdi-wifi-strength-1': model.signal === 1, 'mdi-wifi-strength-2': model.signal === 2, 'mdi-wifi-strength-4': model.signal === 3}"></span>
+                                        <a class="head" ng-click="onConnect($index); toggleDHCP('WIFI')">
+                                            <span class="mdi mdi-wifi locksignal" ng-class="{ 'mdi-wifi-strength-1-lock': model.signal === 1, 'mdi-wifi-strength-2-lock': model.signal === 2, 'mdi-wifi-strength-4-lock': model.signal === 3}"></span>
                                             {{model.ssid}}
                                             <span ng-if="netwrkData.netConnected && netwrkData.connectedIndex === $index">
                                                 <span class="mdi mdi-check connected"></span>
@@ -28,9 +50,12 @@
                                         <!-- Network Connect -->
                                         <md-card layout="column" class="selectnetwork md-list-item-text" ng-if="toggleNetworkScreen[$index]">
 
-                                            <a ng-click="onClose($index)" class="closeConnection"><i class="material-icons">close</i></a>
+                                            <a ng-click="onClose($index)" class="closeConnection"><span class="mdi mdi-close"></span></a>
 
                                             <md-card-content class="no-padd">
+                                                <!-- <div ng-if="netwrkData.showSSIDErr || toggleManualScreen" class="alert alert-danger" role="alert">
+                                          Incorrect SSID or Password (Example Error)
+                                      </div> -->
                                                 <div ng-if="netwrkData.netConnected && netwrkData.connectedIndex === $index"
                                                     class="alert alert-success" role="alert">Connected!</div>
                                                 <!-- Loader -->
@@ -64,7 +89,7 @@
                                                     <div layout="row" layout-align="end">
                                                         <md-button type="submit" class="md-raised md-primary"
                                                             ng-disabled="forms.selectNetwrkForm[$index].$invalid" ng-if="!netwrkData.readOnlyMode[$index]">Connect</md-button>
-                                                        <md-button ng-click="onDisconnect($index)" class="md-raised md-primary"
+                                                        <md-button ng-click="onReconnect($index)" class="md-raised md-primary"
                                                             ng-if="netwrkData.readOnlyMode[$index]">Disconnect</md-button>
                                                     </div>
 
@@ -81,7 +106,7 @@
                         </md-card-content>
                     </md-card>
 
-                    <a ng-click="addManully(currentlyOpened, 'anchorCard')"> Add Network manually</a>
+                    <a class="addManualy" ng-click="addManully(currentlyOpened, 'anchorCard')"> Add Network manually</a>
 
                     <!-- Manual Connect -->
                     <md-card id="anchorCard" layout="column" class="selectnetwork md-list-item-text" ng-if="toggleManualScreen">
@@ -103,10 +128,11 @@
 
                                 <div layout="row">
                                     <md-input-container flex>
-                                        <label>SSID</label>
-                                        <input id="connectSelc" autocomplete="off" name="networkOpt" ng-model="netwrkData.selectManualForm.networkOpt"
-                                            placeholder="Enter SSID" required minlength="4">
-                                    </md-input-container>
+                                        <md-input-container flex>
+                                            <label>SSID</label>
+                                            <input id="connectSelc" autocomplete="off" name="networkOpt" ng-model="netwrkData.selectManualForm.networkOpt"
+                                                placeholder="Enter SSID" required minlength="4">
+                                        </md-input-container>
                                 </div>
 
                                 <div layout="row">
@@ -139,62 +165,108 @@
 
                             <div class="manualwifi">
 
-                                <form class="form-horizontal" name="forms.DHCPForm" ng-submit="submitDHCPNetwrk(forms.DHCPForm)"
-                                    novalidate autocomplete="off">
+                                <form ng-if=!netwrkData.isLanConnected class="form-horizontal" name="forms.DHCPForm"
+                                    ng-submit="submitDHCPNetwrk(forms.DHCPForm)" novalidate autocomplete="off">
 
-                                    <md-switch ng-model="netwrkData.DHCP.networkdhcp" name="networkdhcp" required>
-                                        DHCP
+                                    <md-switch ng-model="netwrkData.DHCPForm.networkdhcp" name="networkdhcp">
+                                        DHCP WIFI
                                     </md-switch>
 
                                     <div layout="row">
                                         <md-input-container flex>
-                                            <input id="ipaddress" placeholder="Ip Address" name="ipaddress" ng-disabled=netwrkData.DHCP.networkdhcp
-                                                ng-model="netwrkData.DHCP.ipaddress" ng-required=!netwrkData.DHCP.networkdhcp
-                                                ng-maxlength="12" ng-pattern="/^([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})[.]([0-9]{1,3})$/">
-                                            <div ng-messages="forms.DHCPForm.ipaddress.$error" multiple>
-                                                <div ng-message="required">This is required.</div>
-                                                <div ng-message="maxlength">maxlength not Okay.</div>
-                                                <div ng-message="pattern">pattern not Okay.</div>
-                                            </div>
-
+                                            <input id="ipaddress" placeholder="Ip Address" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                name="ipaddress" ng-model="netwrkData.DHCPForm.ipaddress" ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                maxlength="15" ng-pattern="(!netwrkData.DHCPForm.networkdhcp)? ipRegex: ''">
                                         </md-input-container>
                                     </div>
 
                                     <div layout="row">
                                         <md-input-container flex>
-                                            <input id="subnetmask" placeholder="Subnet mask" name="subnetmask"
-                                                ng-disabled=netwrkData.DHCP.networkdhcp ng-model="netwrkData.DHCP.subnetmask"
-                                                required ng-required=!netwrkData.DHCP.networkdhcp ui-number-mask="0"
-                                                ui-hide-group-sep maxlength="12">
+                                            <input id="subnetmask" placeholder="Subnet mask" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                name="subnetmask" ng-model="netwrkData.DHCPForm.subnetmask" ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                maxlength="15">
                                         </md-input-container>
                                     </div>
 
                                     <div layout="row">
                                         <md-input-container flex>
-                                            <input id="gateway" placeholder="Gateway" name="gateway" ng-model="netwrkData.DHCP.gateway"
-                                                ng-disabled=netwrkData.DHCP.networkdhcp required ng-required=!netwrkData.DHCP.networkdhcp
-                                                ui-number-mask="0" ui-hide-group-sep maxlength="12">
+                                            <input id="gateway" placeholder="Gateway" name="gateway" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                ng-model="netwrkData.DHCPForm.gateway" ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                maxlength="15" ng-pattern="(!netwrkData.DHCPForm.networkdhcp)? ipRegex: ''">
                                         </md-input-container>
                                     </div>
 
                                     <div layout="row">
                                         <md-input-container flex>
-                                            <input id="dnserver" placeholder="DNS Server" ng-disabled=netwrkData.DHCP.networkdhcp
-                                                name="dnserver" ng-model="netwrkData.DHCP.dnserver" required
-                                                ng-required=!netwrkData.DHCP.networkdhcp ui-number-mask="0"
-                                                ui-hide-group-sep maxlength="12">
+                                            <input id="dnserver" placeholder="DNS Server" ng-disabled=netwrkData.DHCPForm.networkdhcp
+                                                name="dnserver" ng-model="netwrkData.DHCPForm.dnserver" ng-required=!netwrkData.DHCPForm.networkdhcp
+                                                maxlength="15">
                                         </md-input-container>
                                     </div>
 
                                     <div layout="row">
                                         <md-input-container flex>
-                                            <input id="hostname" placeholder="Host name" name="hostname" ng-model="netwrkData.DHCP.hostname"
-                                                required ui-number-mask="0" ui-hide-group-sep maxlength="12">
+                                            <input id="hostname" placeholder="Host name" name="hostname" ng-model="netwrkData.DHCPForm.hostname"
+                                                required maxlength="32" ng-pattern="hostNameRegex">
                                         </md-input-container>
                                     </div>
 
                                     <div layout="row" layout-align="end">
                                         <md-button type="submit" class="md-raised md-primary" ng-disabled="forms.DHCPForm.$invalid">Apply</md-button>
+                                        <md-button class="md-raised md-primary">Cancel</md-button>
+                                    </div>
+
+                                </form>
+
+                                <form ng-if=netwrkData.isLanConnected class="form-horizontal" name="forms.DHCPFormLan"
+                                    ng-submit="submitLanDHCPNetwrk(forms.DHCPFormLan)" novalidate autocomplete="off">
+
+                                    <md-switch ng-model="netwrkData.DHCPFormLan.networkdhcp" name="networkdhcp">
+                                        DHCP LAN
+                                    </md-switch>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="ipaddress" placeholder="Ip Address" ng-disabled=netwrkData.DHCPFormLan.networkdhcp
+                                                name="ipaddress" ng-model="netwrkData.DHCPFormLan.ipaddress"
+                                                ng-required=!netwrkData.DHCPFormLan.networkdhcp maxlength="15"
+                                                ng-pattern="(!netwrkData.DHCPFormLan.networkdhcp)? ipRegex: ''">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="subnetmask" placeholder="Subnet mask" ng-disabled=netwrkData.DHCPFormLan.networkdhcp
+                                                name="subnetmask" ng-model="netwrkData.DHCPFormLan.subnetmask"
+                                                ng-required=!netwrkData.DHCPFormLan.networkdhcp maxlength="15">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="gateway" placeholder="Gateway" name="gateway" ng-disabled=netwrkData.DHCPFormLan.networkdhcp
+                                                ng-model="netwrkData.DHCPFormLan.gateway" ng-required=!netwrkData.DHCPFormLan.networkdhcp
+                                                maxlength="15" ng-pattern="(!netwrkData.DHCPFormLan.networkdhcp)? ipRegex: ''">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="dnserver" placeholder="DNS Server" ng-disabled=netwrkData.DHCPFormLan.networkdhcp
+                                                name="dnserver" ng-model="netwrkData.DHCPFormLan.dnserver" ng-required=!netwrkData.DHCPFormLan.networkdhcp
+                                                maxlength="15">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row">
+                                        <md-input-container flex>
+                                            <input id="hostname" placeholder="Host name" name="hostname" ng-model="netwrkData.DHCPFormLan.hostname"
+                                                required maxlength="32" ng-pattern="hostNameRegex">
+                                        </md-input-container>
+                                    </div>
+
+                                    <div layout="row" layout-align="end">
+                                        <md-button type="submit" class="md-raised md-primary" ng-disabled="forms.DHCPFormLan.$invalid">Apply</md-button>
                                         <md-button class="md-raised md-primary">Cancel</md-button>
                                     </div>
 

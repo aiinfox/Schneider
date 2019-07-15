@@ -50,7 +50,10 @@ todo.save(function(err){
 
 
 router.post('/vars', function(req, res, next) {
-    if(req.headers.urlparams==='name=/SCB/WIFI_STATION/SCAN_RESULTS_JSON') {
+    if(req.headers.urlparams=='name=/SCB/WIFI_STATION/SCAN') {
+        res.sendFile(path.join(__dirname, 'data/wifistation_settings.json'), req.body)
+    }console.log(req.headers.urlparams)
+    if(req.headers.urlparams=='name=/SCB/NETWORK/ACTIVE') {
         res.sendFile(path.join(__dirname, 'data/wifistation_settings.json'), req.body)
     }
 }) 
@@ -65,7 +68,7 @@ router.get('/todos', function(req, res, next) {
 
 /* POST /Network Manual */
 router.post('/setparams', function(req, res, next) {
-    console.log(req.headers)
+    // console.log(req.headers)
     Network.create(req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);

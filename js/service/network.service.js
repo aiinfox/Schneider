@@ -77,30 +77,30 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
       saveFTPServer: saveFTPServer,
       saveCloudSettings: saveCloudSettings,
       getStatusSysvars: getStatusSysvars,
+      saveIEEESettings: saveIEEESettings,
+      saveModbusSettings: saveModbusSettings,
       getConnections: getConnections,
       saveNetworkSettings: saveNetworkSettings,
       getNetworkSettings: getNetworkSettings,
       saveManualSSIDSettings: saveManualSSIDSettings,
-      getSharedVariables : getSharedVariables,
-      setVariable: setVariable
+      saveSelectSSIDSettings: saveSelectSSIDSettings,
+      getNetworkMode: getNetworkMode,
+      getWifiNetworkSettings: getWifiNetworkSettings,
+      getLanNetworkSettings: getLanNetworkSettings,
+      getIEEEStatus: getIEEEStatus,
+      saveDHCPWifi: saveDHCPWifi,
+      saveDHCPLan: saveDHCPLan,
+      setScan: setScan
     };
 
     return service;
 
-    
-
-    
-
-    ////////////////////////////////////////////////// 
-    //  Getter and Setters for Common Variables
-
-    //function declarations
-    function getSharedVariables(paramName) {
-        return sharedVariables[paramName];
+    function getIEEEStatus() {
+      var avOptionssvars = [
+        '/SCB/2030/STATUS'
+      ];
+      return queryService.getSysvars(avOptionssvars);
     }
-    function setVariable(paramName, value) {
-        sharedVariables[paramName] = value;
-    }    
 
     function getNetworkData() {
       return queryService.getSysvars(queryVars);
@@ -113,13 +113,6 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
       return queryService.getSysvars(avOptionssvars);
     }
 
-    function getConnections() {
-      var avOptionssvars = [
-        '/SCB/WIFI_STATION/SCAN_RESULTS_JSON'
-      ];
-      return queryService.getSysvars(avOptionssvars);
-    }
-
     function getStatusSysvars() {
       var stsSysvars = ['/SCB/CNM/ISCONNECTED', 'SESSION/DIAG_ID',
         'SESSION/DIAG_ACTIVE', '/SCB/CNM/TX_COUNT',
@@ -128,6 +121,38 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
       ];
       return queryService.getSysvars(stsSysvars);
     }
+
+    function getConnections() {
+      var avOptionssvars = [
+        '/SCB/WIFI_STATION/SSID',
+        '/SCB/WIFI_STATION/SCAN_RESULTS_JSON',
+        '/SCB/WIFI_STATION/STATUS',
+      ];
+      return queryService.getSysvars(avOptionssvars);
+    }
+
+    function getNetworkMode(){
+      var avOptionssvars = [
+        '/SCB/NETWORK/ACTIVE'
+      ];
+      return queryService.getSysvars(avOptionssvars);
+    }
+
+    function getWifiNetworkSettings(){
+      var avOptionssvars = [
+        '/SCB/NETWORK/TIW_STA0IPSHOW','/SCB/NETWORK/TIW_STA0NETMASKSHOW','/SCB/NETWORK/TIW_STA0IP','/SCB/NETWORK/TIW_STA0NETMASK','/SCB/NETWORK/TIW_STA0DHCP', 'ETH0/TCPIP/DHCP_GWAY', '/SCB/NETWORK/DNSSERVER', 'HOSTNAME'
+      ];
+      return queryService.getSysvars(avOptionssvars);
+    }
+
+    function getLanNetworkSettings(){
+      var avOptionssvars = [
+        '/SCB/NETWORK/DM0IPSHOW','/SCB/NETWORK/DM0NETMASKSHOW','/SCB/NETWORK/DM0IP','/SCB/NETWORK/DM0NETMASK','/SCB/NETWORK/DM0DHCP', 'ETH0/TCPIP/DHCP_GWAY', '/SCB/NETWORK/DNSSERVER', 'HOSTNAME'
+      ];
+      return queryService.getSysvars(avOptionssvars);
+    }
+
+    /* SET Queries for saving to Sys vars */
 
     function saveRemoteDiagnostics(data) {
       var requestObject = {};
@@ -143,7 +168,8 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
 
     function saveLanSettings(data) {
       var requestObject = {};
-      requestObject["/SCB/NETWORK/DM0DHCP"] = data.SCB_NETWORK_DM0DHCP;
+     
+     requestObject["/SCB/NETWORK/DM0DHCP"] = data.SCB_NETWORK_DM0DHCP;
       if (data.SCB_NETWORK_DM0DHCP === 0) {
         requestObject["/SCB/NETWORK/DM0IP"] = data.ETH0_TCPIP_DHCP_IP;
         requestObject["/SCB/NETWORK/DEFAULTGW"] = data.ETH0_TCPIP_DHCP_GWAY;
@@ -153,29 +179,6 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
       requestObject["HOSTNAME"] = data.HOSTNAME;
 
       requestObject["/SCB/NETWORK/SET"] = 1;
-      return csbQuery.setFromObject(requestObject, true);
-    }
-
-    //Change: Network Settings
-    function saveNetworkSettings(data) {
-      var requestObject = {};
-      requestObject["/SCB/NETWORK/TIW_STA0IP"] = data.ipaddress;
-      requestObject["/SCB/NETWORK/TIW_STA0NETMASK"] = data.subnetmask;
-      requestObject["/SCB/NETWORK/TIW_STA0DHCP"] = data.networkdhcp;
-      requestObject["/SCB/NETWORK/TIW_STA0IPSHOW"] = data.gateway;
-      requestObject["/SCB/NETWORK/TIW_STA0MACADDRESS"] = data.dnserver;
-      requestObject["/SCB/NETWORK/TIW_STA0NETMASKSHOW"] = data.hostname;
-    
-      requestObject["/SCB/NETWORK/SET"] = 1;
-      return csbQuery.setFromObject(requestObject, true);
-    }
-
-    function saveManualSSIDSettings(data) {
-      var requestObject = {};
-      requestObject["/SCB/WIFI_STATION/SSID"] = data.networkOpt;
-      requestObject["/SCB/WIFI_STATION/PASSWORD"] = data.networkpassword;
-  
-      requestObject["/SCB/WIFI_STATION/APPLY_SETTINGS"] = 1;
       return csbQuery.setFromObject(requestObject, true);
     }
 
@@ -236,6 +239,98 @@ angular.module('conext_gateway').factory('gatewayNetworkService', [ '$q', '$log'
         }
       }
       requestObject["/SCB/CNM/ALLOW_UPGRADE"] = data.SCB_CNM_ALLOW_UPGRADE;
+      return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function saveIEEESettings(data) {
+      var requestObject = {};
+      requestObject["/SCB/2030/ENABLE"] = data.SCB_2030_ENABLE;
+      requestObject["/SCB/2030/SERVER_ADDR"] = data.SCB_2030_SERVER_ADDR;
+      requestObject["/SCB/2030/SERVER_PORT"] = data.SCB_2030_SERVER_PORT;
+      return csbQuery.setFromObject(requestObject, true);
+    }
+    
+    function saveModbusSettings(data) {
+        var requestObject = {};
+        requestObject["/SCB/MBSERVER/DISABLE"] = data.SCB_MBSERVER_DISABLE;
+        return csbQuery.setFromObject(requestObject, true);
+    }
+      
+    function saveNetworkSettings(data) {
+        var requestObject = {};
+        requestObject["/SCB/NETWORK/TIW_STA0IP"] = data.ipaddress;
+        requestObject["/SCB/NETWORK/TIW_STA0NETMASK"] = data.subnetmask;
+        requestObject["/SCB/NETWORK/TIW_STA0DHCP"] = data.networkdhcp;
+        requestObject["/SCB/NETWORK/TIW_STA0IPSHOW"] = data.gateway;
+        requestObject["/SCB/NETWORK/TIW_STA0MACADDRESS"] = data.dnserver;
+        requestObject["/SCB/NETWORK/TIW_STA0NETMASKSHOW"] = data.hostname;
+      
+        requestObject["/SCB/NETWORK/SET"] = 1;
+        return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function saveManualSSIDSettings(data) {
+        var requestObject = {};
+        requestObject["/SCB/WIFI_STATION/SSID"] = data.networkOpt;
+        requestObject["/SCB/WIFI_STATION/PASSWORD"] = data.networkpassword;
+    
+        requestObject["/SCB/WIFI_STATION/APPLY_SETTINGS"] = 1;
+        return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function saveSelectSSIDSettings(data) {
+        var requestObject = {};
+        requestObject["/SCB/WIFI_STATION/SSID"] = data.ssid;
+        requestObject["/SCB/WIFI_STATION/PASSWORD"] = data.networkpassword;
+    
+        requestObject["/SCB/WIFI_STATION/APPLY_SETTINGS"] = 1;
+        return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function saveDHCPWifi(data) {
+        var requestObject = {};
+        if(data.networkdhcp) {
+          requestObject["/SCB/NETWORK/TIW_STA0DHCP"] = 1;
+        }
+        else {
+          requestObject["/SCB/NETWORK/TIW_STA0DHCP"] = 0;
+          requestObject["/SCB/NETWORK/TIW_STA0IP"] = data.ipaddress;
+          requestObject["/SCB/NETWORK/TIW_STA0NETMASK"] = data.subnetmask;
+          requestObject["/SCB/NETWORK/DEFAULTGW"] = data.gateway;
+          requestObject["/SCB/NETWORK/DNSSERVER"] = data.dnserver;
+        }
+
+        requestObject["HOSTNAME"] = data.hostname;
+        requestObject["/SCB/NETWORK/SET"] = 1;
+        return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function saveDHCPLan(data) {
+      var requestObject = {};
+      var requestObject = {};
+      if(data.networkdhcp) {
+        requestObject["/SCB/NETWORK/DM0DHCP"] = 1;
+      }
+      else {
+        requestObject["/SCB/NETWORK/DM0DHCP"] = 0;
+        requestObject["/SCB/NETWORK/DM0IP"] = data.ipaddress;
+        requestObject["/SCB/NETWORK/DM0NETMASK"] = data.subnetmask;
+        requestObject["/SCB/NETWORK/DEFAULTGW"] = data.gateway;
+        requestObject["/SCB/NETWORK/DNSSERVER"] = data.dnserver;
+      }
+
+      requestObject["HOSTNAME"] = data.hostname;
+      requestObject["/SCB/NETWORK/SET"] = 1;
+    return csbQuery.setFromObject(requestObject, true);
+    }
+
+    function setScan() {
+      //GET for OTK 412 Issue
+      var avOptionssvars = ["/SCB/WIFI_STATION/SCAN"];
+      queryService.getSysvars(avOptionssvars);
+      //SET
+      var requestObject = {};
+      requestObject["/SCB/WIFI_STATION/SCAN"] = 1;
       return csbQuery.setFromObject(requestObject, true);
     }
   }

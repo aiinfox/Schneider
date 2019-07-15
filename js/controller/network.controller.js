@@ -129,7 +129,7 @@ $scope.netwrkData.availableNetworks = [
             /* Check the response data */
             if (angular.isObject(res)) {
                 /* Return data */
-                if($scope.netwrkData.netConnected) {
+                if(angular.isDefined($scope.netwrkData.netConnected) && angular.isDefined($scope.netwrkData.connectedIndex) && $scope.netwrkData.connectedIndex != null) {
                     var connectedSSID = $filter('filter')(res, {ssid: $scope.netwrkData.availableConnections[$scope.netwrkData.connectedIndex].ssid}, true)[0];
                     if(angular.isUndefined(connectedSSID)){
                         console.log('!!Disconnected!')

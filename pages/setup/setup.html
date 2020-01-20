@@ -1,0 +1,49 @@
+<section class="container">
+    <md-card class="slectparams" ng-init="stepSelected = 0">
+        <md-steppers md-dynamic-height md-selected="stepSelected" md-stretch-steppers="always">
+            <md-step label="Select parameters to log" md-complete="step1.completed" ng-disabled="step1.disabled">
+                <md-content class="stepper-padd virtualRepeatdemoScrollTo">
+                        <div class="wrapper">
+                            <md-input-container>
+                                <md-select ng-model="selectedDevice" aria-label="Select a Device">
+                                    <md-option ng-value="$index" ng-repeat="device in devicesConnected">{{ device.name }}</md-option>
+                                </md-select>
+                            </md-input-container>
+                        
+                            <md-virtual-repeat-container id="vertical-container" md-top-index="topIndex">
+                                <div md-virtual-repeat="item in allDevices"
+                                    class="repeated-item" ng-class="{header: item.header}" flex>
+                                    {{item.device.name | json}}
+                                </div>
+                            </md-virtual-repeat-container>
+                        </div>
+                    <br>
+                    <md-button class="md-raised md-primary" ng-click="stepSelected = 1; step1.completed = true"
+                        ng-disabled="!selected1.length > 0 && !selected2.length > 0 && !selected3.length > 0">Next</md-button>
+                </md-content>
+            </md-step>
+            <md-step label="Set frequency" md-complete="step2.completed" ng-disabled="step2.disabled || !selected1.length > 0 && !selected2.length > 0 && !selected3.length > 0">
+                <md-content class="stepper-padd">
+                    <div flex="40">
+                        <md-input-container class="md-icon-float md-icon-right md-block ms-outline">
+                            <label>frequency in miliseconds</label>
+                            <input type="number" placeholder="0" min="0" ng-model="freqInMili" name="freqinmili">
+                        </md-input-container>
+                    </div>
+                    <md-button class="md-raised md-primary" ng-click="stepSelected = 0; step2.completed = false">Prev</md-button>
+                    <md-button class="md-raised md-primary" ng-click="stepSelected = 2; step2.completed = true"
+                        ng-disabled="!freqInMili">Next</md-button>
+                </md-content>
+            </md-step>
+            <md-step label="Done" md-complete="step3.completed" ng-disabled="step3.disabled || !freqInMili">
+                <md-content class="stepper-padd">
+                    <md-card class="padd-l">
+                        <h4 class="padd-l">Parameters set for logging successfully.</h4>
+                    </md-card>
+                    <md-button class="md-raised md-primary" ng-click="stepSelected = 1; step3.completed = false">Prev</md-button>
+                    <md-button class="md-raised md-primary" ng-click="stepSelected = 3; step3.completed = true">Finish</md-button>
+                </md-content>
+            </md-step>
+        </md-steppers>
+    </md-card>
+</section>

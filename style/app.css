@@ -8,6 +8,7 @@
 .connectioncontainer{
   max-height: 200px;
   overflow: auto;
+  transition: all 1s linear;
 }
 .listconnection{
   padding: 15px;
@@ -78,3 +79,56 @@ md-select { width: 100%; }
     -webkit-font-smoothing: antialiased;
 }
 md-input-container:not(.md-input-has-value) input:not(:focus) { color: rgba(0,0,0,0.87) !important; }
+
+/* SetUp */
+.container { margin: 0 20px; }
+.stepper-padd { padding: 25px; }
+
+.slectparams md-checkbox {
+  margin-bottom: 10px;
+}
+.slectparams .padd-l {
+  padding: 16px;
+}
+.slectparams .selectrow {
+  padding: 0 7px;
+}
+.slectparams .selectrow > * {
+  display: inline-block;
+  vertical-align: top;
+}
+.slectparams .selectrow > h4 {
+  margin-top: 1px;
+  vertical-align: top;
+}
+
+/* Virtual Scrollbar */
+.virtualRepeatdemoScrollTo .wrapper {
+  width: 100%;
+  max-width: 400px; }
+
+.virtualRepeatdemoScrollTo #vertical-container {
+  height: 292px;
+  width: 100%;
+  max-width: 400px; }
+
+.virtualRepeatdemoScrollTo #vertical-container .repeated-item {
+  border-bottom: 1px solid #ddd;
+  box-sizing: border-box;
+  height: 40px;
+  padding-top: 10px; }
+
+.virtualRepeatdemoScrollTo #vertical-container .repeated-item.header {
+  background-color: #106CC8;
+  color: white;
+  text-align: center;
+  font-weight: bold; }
+
+.virtualRepeatdemoScrollTo #vertical-container md-content {
+  margin: 16px; }
+
+.virtualRepeatdemoScrollTo md-virtual-repeat-container {
+  border: solid 1px grey; }
+
+.virtualRepeatdemoScrollTo .md-virtual-repeat-container .md-virtual-repeat-offsetter div:not(.header) {
+  padding-left: 16px; }

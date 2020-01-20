@@ -3,7 +3,8 @@
 // Define the `networkController` controller on the `conext_gateway` module
 
 
-angular.module('conext_gateway').controller("networkController", [ 
+angular.module('conext_gateway')
+.controller("networkController", [ 
     '$scope', 
     '$log', 
     '$interval', 
@@ -13,7 +14,8 @@ angular.module('conext_gateway').controller("networkController", [
     "$anchorScroll", 
     "$location", 
     "gatewayNetworkService",
-    '$filter'
+    '$filter',
+    '$sanitize'
     ,
 function(
     $scope, 
@@ -25,7 +27,8 @@ function(
     $anchorScroll, 
     $location, 
     gatewayNetworkService,
-    $filter
+    $filter,
+    $sanitize
 ) {
 
     /////////////////////////////////////////////////////////////////////////////
@@ -38,7 +41,7 @@ function(
     $scope.selectNetwrkFormData = {};
     
     $scope.status = {
-        isWifiOpen: false,
+        isWifiOpen: true,
         isCustomHeaderOpen: false,
         isFirstDisabled: false
     };
@@ -136,6 +139,17 @@ $scope.netwrkData.availableNetworks = [
                         $scope.onDisconnect($scope.netwrkData.connectedIndex);
                         $scope.netwrkData.showDisconnectErr = true;
                     }
+
+
+                    // "Replace and Insert" Logic
+                    var index = res.findIndex(item => item.ssid === $scope.netwrkData.availableConnections[$scope.netwrkData.connectedIndex].ssid)
+                    if(index != '0') {
+                        // Replace the item by index
+                        delete res[index];
+                        res.unshift(connectedSSID)
+                        $scope.netwrkData.connectedIndex = 0;
+                    }
+
                 }
 
                 $scope.netwrkData.availableConnections = res;
@@ -154,9 +168,9 @@ $scope.netwrkData.availableNetworks = [
                 if($scope.connCount < 2){
                     //check if connection is active
                     if(angular.isDefined(gatewayNetworkService.getSharedVariables('selectNetwrkFormConnected'))){
-                        var index = gatewayNetworkService.getSharedVariables('selectNetwrkFormConnected');
-                        $scope.netwrkData.connectedIndex = index;
-                        $scope.netwrkData.netConnected = true;
+                        //var index = gatewayNetworkService.getSharedVariables('selectNetwrkFormConnected');
+                        //$scope.netwrkData.connectedIndex = index;
+                        //$scope.netwrkData.netConnected = true;
                     }
                 }
                 return res;
@@ -164,7 +178,8 @@ $scope.netwrkData.availableNetworks = [
         });
     }
 
-    $scope.getConnections();
+    //$scope.getConnections();
+    //clearGetConnInter = $interval(function() { $scope.getConnections(); },2000);
     var clearGetConnInter;
     if(angular.isDefined($scope.status.isWifiOpen)) {
         $scope.$watch('status.isWifiOpen', function (newval, oldval) {
@@ -173,7 +188,7 @@ $scope.netwrkData.availableNetworks = [
                 $scope.netwrkData.DHCPFormObj = {};
                 $scope.netwrkData.DHCPFormObj = angular.copy($scope.forms.DHCPForm);
                 $scope.watchnetworkdhcp();
-                clearGetConnInter = $interval(function() { $scope.getConnections(); },1000);
+                // clearGetConnInter = $interval(function() { $scope.getConnections(); },1000);
             } else if( newval == false) {
                 $interval.cancel(clearGetConnInter);
                 $scope.clearGetConnInter = null;
@@ -304,6 +319,8 @@ $scope.netwrkData.availableNetworks = [
         
         $scope.netwrkData.connectedIndex = i;
         $scope.netwrkData.netConnected = true;
+        $interval.cancel(clearGetConnInter);
+        $scope.clearGetConnInter = null;
 
         // Test
 
@@ -354,7 +371,9 @@ $scope.netwrkData.availableNetworks = [
                 $scope.netwrkData.selectNetwrkForm.networkpassword = null;
                 $scope.forms.selectNetwrkForm[i].$setPristine();
                 $scope.forms.selectNetwrkForm[i].$setUntouched();
-                $timeout(function(){$scope.toggleNetworkScreen[i] = false},1000) // Simulate the API experience
+                $timeout(function(){$scope.toggleNetworkScreen[i] = false;
+                    clearGetConnInter = $interval(function() { $scope.getConnections(); },2000);   
+                },1000) // Simulate the API experience
             };
         }
     } 
@@ -437,6 +456,54 @@ $scope.netwrkData.availableNetworks = [
 
 }
 ])
+.directive('input', ["$sanitize", function($sanitize) {
+    return {
+      restrict: 'E',
+      require: '?ngModel',
+      link: function (scope, element, attributes, ngModel) {
+          if ((attributes.type !== "button" && attributes.name) || (attributes.type !== "submit"  && attributes.name)) {
+              if(ngModel !== undefined){
+  
+                  ngModel.$$setOptions({
+                    //   '*': '$inherit',
+                      // allowInvalid: true,
+                      updateOn: 'default blur keyup',
+                    //   debounce: { 'default': 100, 'blur': 0, '*': 100 }
+                  });
+  
+                  ngModel.$parsers.push(function(value){
+                      var unSaniValue = value;
+                      var saniValue = $sanitize(value);
+                      console.log(saniValue)
+                      if(unSaniValue == saniValue) {
+                          ngModel.$setViewValue(unSaniValue); ngModel.$render();
+                          ngModel.$formatters.push(function(value) { return unSaniValue || ''; });
+                          return unSaniValue;
+                      } else {
+                          ngModel.$setViewValue(null); ngModel.$render()
+                          return null;
+                      }
+                  });
+  
+  
+  
+  
+  
+                  /* ngModel.$$setOptions({
+                      '*': '$inherit',
+                      debounce: 100,
+                      allowInvalid: true,
+                  });
+                  ngModel.$parsers.push(function(value){
+                      ngModel.$setViewValue($sanitize(value));
+                      ngModel.$render();
+                      return $sanitize(value);
+                  }); */
+              }
+          }
+      }
+    };
+  }])
 .config(function($mdThemingProvider) { 
 $mdThemingProvider.theme('default')
     .primaryPalette('green', {

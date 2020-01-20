@@ -22,9 +22,9 @@ var corsOptions = {
 const mongoURL = 'mongodb://localhost/conext_gateway';
 
 // connect to MongoDB
-mongoose.connect(mongoURL)
+/* mongoose.connect(mongoURL)
   .then(() =>  console.log('connection succesful'))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error(err)); */
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
@@ -77,34 +77,34 @@ router.post('/setparams', function(req, res, next) {
 //Examples
 
 /* POST /todos */
-router.post('/', function(req, res, next) {
+/* router.post('/', function(req, res, next) {
     Todo.create(req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });
-});
+}); */
 
 /* GET /todos/id */
-router.get('/:id', function(req, res, next) {
+/* router.get('/:id', function(req, res, next) {
     Todo.findById(req.params.id, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });
-});
+}); */
 /* PUT /todos/:id */
-router.put('/:id', function(req, res, next) {
+/* router.put('/:id', function(req, res, next) {
     Todo.findByIdAndUpdate(req.params.id, req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });
-});
+}); */
 /* DELETE /todos/:id */
-router.delete('/:id', function(req, res, next) {
+/* router.delete('/:id', function(req, res, next) {
     Todo.findByIdAndRemove(req.params.id, req.body, function (err, post) {
         if (err) return next(err);
         res.json(post);
     });
-});
+}); */
 
 
 

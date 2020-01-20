@@ -1,0 +1,97 @@
+<!-- <div style="height:100%; width:100%" ng-click="deviceClick(device)" class="devlist-click" ng-class="{'devlist-offline': state !== 'Online'}">
+  <div class="col-md-12 devlist-header row">
+    <div class="col-md-6 no-padding devlist-title pull-left">
+      <div>{{device.status[0].value}} {{device.status[1].value}}</div>
+    </div>
+    <div class="col-md-6 no-padding pull-right" style="position: absolute; bottom: 0; right: 0; padding-right: 15px; font-size: 20px;text-align: end;">
+      <div ng-if="state !== 'Online'" style="color:#DC0A0A; " translate='{{state}}'>
+      </div>
+      <div ng-if="state === 'Online'" style="color:#3DCD58; " translate='xanbus.xbdevlist.online'>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+    <div class="col-md-4 col-xs-12 pull-right no-padding">
+      <div class="col-md-12 no-padding col-sm-6 col-sm-offset-3 col-md-offset-0">
+        <xw-image ng-if="device.name === 'XW'" device="device" ></xw-image>
+        <csw-image ng-if="device.name === 'CSW'" device="device"></csw-image>
+        <fsw-image ng-if="device.name === 'FSW'" device="device"></fsw-image>
+      </div>
+    </div>
+    <div class="col-md-8 no-padding" style="padding-right: 15px;">
+      <div class="col-md-12 no-padding devlist-row" ng-repeat="status in device.status.slice(2, device.status.length)">
+        <div class="col-md-6 no-padding devlist-description">
+          {{status.description | translate}}
+        </div>
+        <div ng-if="state === 'Online'" class="col-md-6 no-padding devlist-value">
+          {{status.value}} {{status.unit}}
+        </div>
+        <div ng-if="state !== 'Online'" class="col-md-6 no-padding devlist-value">
+          &ndash;&ndash;
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<md-card class="deviceCard" ng-click="deviceClick(device)" class="devlist-click">
+  <md-card-header>
+    <md-card-header-text layout="row" layout-align="center center">
+      <span flex class="md-title">{{device.name}}</span>
+      <span flex class="md-subhead flex-end">Online</span>
+    </md-card-header-text>
+  </md-card-header>
+  
+  <md-card-content>
+    <div layout="row" layout-margin>
+       <div flex="75">
+          <md-list>
+              <md-list-item layout="column" class="no-padd">
+                <div class="md-list-item-text">
+                  <span class="propleft">access</span>              
+                  <span class="propright">  {{device.access}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">basic</span>             
+                  <span class="propright">  {{device.basic}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">dataNotAvailable</span>              
+                  <span class="propright">  {{device.dataNotAvailable}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">enumRef</span>             
+                  <span class="propright">  {{device.enumRef}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">infoRef</span>             
+                  <span class="propright">  {{device.infoRef}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">inputType</span>             
+                  <span class="propright">  {{device.inputType}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">name</span>              
+                  <span class="propright">  {{device.name}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">nameRef</span>             
+                  <span class="propright">  {{device.nameRef}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">offset</span>              
+                  <span class="propright">  {{device.offset}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">regtype</span>             
+                  <span class="propright">  {{device.regtype}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">scale</span>             
+                  <span class="propright">  {{device.scale}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">shortname</span>             
+                  <span class="propright">  {{device.shortname}}</span></div>
+                <div class="md-list-item-text">
+                  <span class="propleft">type</span>              
+                  <span class="propright">  {{device.type}}</span></div>
+              </md-list-item>
+            </md-list>
+       </div>
+       <div flex> <p>Device Image</p>
+        <img src="../../../img/device.png" alt=""/>
+       </div>
+    </div>
+  </md-card-content>
+</md-card>

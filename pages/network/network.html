@@ -16,7 +16,7 @@
                             <div class="available-networks">
 
                                 <div class="connectioncontainer">
-                                    <div class="listconnection" ng-class="{ 'active': active == $index}" ng-repeat="model in netwrkData.availableConnections track by $index">
+                                    <div ng-if="model" class="listconnection" ng-class="{ 'active': active == $index}" ng-repeat="model in netwrkData.availableConnections track by $index">
                                         <a class="head" ng-click="onConnect($index)">
                                             <span class="mdi mdi-wifi locksignal" ng-class="{ 'mdi-wifi-strength-1': model.signal === 1, 'mdi-wifi-strength-2': model.signal === 2, 'mdi-wifi-strength-4': model.signal === 3}"></span>
                                             {{model.ssid}}
@@ -197,6 +197,8 @@
                                         <md-button type="submit" class="md-raised md-primary" ng-disabled="forms.DHCPForm.$invalid">Apply</md-button>
                                         <md-button class="md-raised md-primary">Cancel</md-button>
                                     </div>
+
+                                    {{forms.DHCPForm | json}}
 
                                 </form>
                             </div>

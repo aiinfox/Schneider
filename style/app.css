@@ -105,7 +105,7 @@ md-input-container:not(.md-input-has-value) input:not(:focus) { color: rgba(0,0,
 /* Virtual Scrollbar */
 .virtualRepeatdemoScrollTo .wrapper {
   width: 100%;
-  max-width: 400px; }
+}
 
 .virtualRepeatdemoScrollTo #vertical-container {
   height: 292px;
@@ -132,3 +132,5 @@ md-input-container:not(.md-input-has-value) input:not(:focus) { color: rgba(0,0,
 
 .virtualRepeatdemoScrollTo .md-virtual-repeat-container .md-virtual-repeat-offsetter div:not(.header) {
   padding-left: 16px; }
+  .itemname { position: relative; display: block; z-index: 1; }
+  .checked { position: relative; float: right; margin-top: -22px; margin-right: 10px; color: #f00; }

@@ -1,0 +1,26 @@
+{
+    "events": [
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T16:07:00.570000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T14:18:42.084000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        }
+    ],
+    "responseTime": "32.000000",
+    "avgResponseTime": "89.773438",
+    "filesopened": 2,
+    "filesclosed": 2,
+    "eventsRendered": 2,
+    "avgEventsRendered": "26.000000"
+}

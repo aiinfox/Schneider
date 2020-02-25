@@ -1,0 +1,410 @@
+{
+    "events": [
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-24T16:10:16.317000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-24T16:10:16.206000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T16:07:00.570000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10041,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T14:53:47.053000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T14:18:42.084000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10041,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T13:27:37.989000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:53:37.725000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10003,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:52.062000000-0800",
+            "signal": "Trip",
+            "parameters": "v1.07DEV,2020-02-24_12-31-58,157 "
+        },
+        {
+            "code": 10029,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:28.205000000-0800",
+            "signal": "Trip",
+            "parameters": ""
+        },
+        {
+            "code": 10052,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:21.799000000-0800",
+            "signal": "Trip",
+            "parameters": ""
+        },
+        {
+            "code": 10034,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:21.736000000-0800",
+            "signal": "Trip",
+            "parameters": "MPPT,1233094"
+        },
+        {
+            "code": 10034,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:21.575000000-0800",
+            "signal": "Trip",
+            "parameters": "SCP2,468513"
+        },
+        {
+            "code": 10034,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:52:21.438000000-0800",
+            "signal": "Trip",
+            "parameters": "XW,1980939"
+        },
+        {
+            "code": 10059,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:50:46.780000000-0800",
+            "signal": "Trip",
+            "parameters": ""
+        },
+        {
+            "code": 10005,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:47:45.520000000-0800",
+            "signal": "Trip",
+            "parameters": ""
+        },
+        {
+            "code": 10004,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T12:45:48.937000000-0800",
+            "signal": "Trip",
+            "parameters": "865-0329-v1.07DEV-BN157.pkg"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T11:16:12.904000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10041,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T11:14:47.687000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T11:03:37.334000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10041,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T11:03:14.452000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T10:58:32.193000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10041,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T10:57:07.424000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10040,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T10:39:45.917000000-0800",
+            "signal": "Trip",
+            "parameters": "Admin"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T10:21:13.792000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,401874"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T10:19:50.256000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,401874"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T03:19:12.935000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-24T03:17:10.681000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-24T02:29:34.515000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-24T02:29:34.404000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-23T20:49:58.204000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-23T20:49:58.104000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-23T15:39:51.425000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-23T15:39:51.294000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-23T03:19:06.490000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-23T03:17:05.023000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-22T16:30:02.105000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-22T16:30:01.944000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-22T09:08:53.395000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-22T09:08:53.234000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-22T03:19:01.872000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-22T03:17:00.030000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1970403"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-21T23:25:59.245000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-21T23:25:59.104000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-21T19:17:41.426000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1057147"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-21T19:16:21.412000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1057147"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-21T19:02:13.047000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,1057147"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-21T18:22:13.004000000-0800",
+            "signal": "Clear",
+            "parameters": "1,39"
+        },
+        {
+            "code": 1000,
+            "source": "EZMETER",
+            "severity": 6,
+            "timestamp": "2020-02-21T18:22:12.844000000-0800",
+            "signal": "Trip",
+            "parameters": "1,39"
+        },
+        {
+            "code": 10050,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-21T18:03:56.780000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,401874"
+        },
+        {
+            "code": 10051,
+            "source": "SCB",
+            "severity": 6,
+            "timestamp": "2020-02-21T18:02:32.301000000-0800",
+            "signal": "Trip",
+            "parameters": "unknown,401874"
+        }
+    ],
+    "responseTime": "107.000000",
+    "avgResponseTime": "100.943359",
+    "filesopened": 4,
+    "filesclosed": 4,
+    "eventsRendered": 50,
+    "avgEventsRendered": "44.000000"
+}
